@@ -66,34 +66,33 @@
 
 <body>
     <div class="random-settings-container normalized">
-        <h2 id="random-products-title">Random Products</h2>
-        <h3 id="random-products-legend">Settings</h3>
+        <h2 id="random-product-title">Random Products</h2>
+        <h3 id="random-product-legend">Settings</h3>
         <div>
             <form id="random-settings" name="random-settings">
                 <div>
-                    <label id="random-products-max-shown">Max products shown (&lt;&nbsp;6)</label>
-                    <input class="form-control input-medium" name="maximum" type="text" value="5">
+                    <label id="random-product-max-shown">Max products shown (&lt;&nbsp;6)</label>
+                    <input class="form-control input-medium" name="maximum" type="text" value="1">
                 </div>
                 <div>
-                    <label id="random-products-place">Place for Random Products</label>
+                    <label id="random-product-place">Place for Random Products</label>
                     <div class="select-wrap">
-                        <select class="form-control input-medium" id="random-products-place-select">
+                        <select class="form-control input-medium" id="random-product-place-select">
                             <option value="above" selected>Above</option>
                             <option value="under">Under</option>
                             <option value="custom">Custom container</option>
                         </select>
                     </div>
-                    <div id='random-products-custom-selector-container' style="display: none;">
-                      <label id="random-products-custom-selector">Container</label>
+                    <div id='random-product-custom-selector-container' style="display: none;">
+                      <label id="random-product-custom-selector">Container</label>
                       <input class="form-control input-medium" name="selector" type="text" >
                     </div>
                 </div>
 
-                <button id="random-products-save" type="submit" class="btn btn-primary btn-medium">Save</button>
+                <button id="random-product-save" type="submit" class="btn btn-primary btn-medium">Save</button>
             </form>
         </div>
     </div>
-    <script src="random-product-admin.js"></script>
 </body>
 
 </html>

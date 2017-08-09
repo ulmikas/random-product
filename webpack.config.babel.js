@@ -15,8 +15,8 @@ const CSS_MAPS = ENV!=='production';
 module.exports = {
 	context: path.resolve(__dirname, "src"),
 	entry: {
-		'recently-products': './recently-products.js',
-		'recently-products-admin': './recently-products-admin.js'
+		'random-product': ['babel-polyfill', './random-product.js'],
+		'random-product-admin': './random-product-admin.js'
 	},
 
 	output: {
@@ -94,15 +94,24 @@ module.exports = {
 
 	plugins: ([
 		new webpack.NoErrorsPlugin(),
-		new ExtractTextPlugin('recently-products.css', {
+		new ExtractTextPlugin('random-product.css', {
 			allChunks: true,
-			disable: ENV!=='production'
+			// disable: ENV!=='production'
 		}),
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify(ENV)
 		}),
 		new HtmlWebpackPlugin({
+			template: './index-storefront.ejs',
+			filename: 'index-storefront.html',
+			chunks: ['random-product'],
+			minify: { collapseWhitespace: true },
+			disable: ENV==='production'
+		}),
+		new HtmlWebpackPlugin({
 			template: './index.ejs',
+			filename: 'index.html',
+			chunks: ['random-product-admin'],
 			minify: { collapseWhitespace: true }
 		}),
 		new ScriptExtHtmlWebpackPlugin({
@@ -110,7 +119,7 @@ module.exports = {
 		}),
 		new CopyWebpackPlugin([
 			{ from: './manifest.json', to: './' },
-			{ from: './favicon.ico', to: './' }
+			// { from: './favicon.ico', to: './' }
 		])
 	]).concat(ENV==='production' ? [
 		new V8LazyParseWebpackPlugin(),

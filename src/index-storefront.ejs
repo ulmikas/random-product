@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<% for (var chunk in htmlWebpackPlugin.files.css) { %>
+		<link rel="preload" href="<%= htmlWebpackPlugin.files.css[chunk] %>"  as="style">
+	<% } %>
+	<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+		<link rel="preload" href="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>" as="script">
+	<% } %>
+	<meta charset="utf-8">
+	<title>preact-boilerplate</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+	<meta name="description" content="preact-boilerplate">
+	<meta name="msapplication-TileColor" content="#673ab8">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-title" content="preact-boilerplate">
+	<meta name="application-name" content="preact-boilerplate">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="theme-color" content="#673ab8">
+	<link rel="manifest" href="./manifest.json">
+</head>
+<body>
+
+	<div id="my-store-7022058"></div>
+<div>
+<script type="text/javascript" src="https://app.ecwid.com/script.js?7022058&data_platform=code&data_date=2017-08-09" charset="utf-8"></script><script type="text/javascript"> xProductBrowser("categoriesPerRow=3","views=grid(20,3) list(60) table(60)","categoryView=grid","searchView=list","id=my-store-7022058");</script>
+</div>
+
+</body>
+</html>

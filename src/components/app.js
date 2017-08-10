@@ -1,6 +1,6 @@
 import {h, Component } from 'preact';
 import Product from './Product';
-import { titles } from '../texts';
+// import { titles } from '../texts';
 
 const Ecwid = window.Ecwid;
 
@@ -22,8 +22,7 @@ class App extends Component {
   }
 
   render() {
-
-    const title = (titles.hasOwnProperty(this.props.settings.lang)) ? titles[this.props.settings.lang] : titles['en'];
+    const title = this.props.title || '';
     return (
       <div id="random-products-wrapper" className={(this.state.rp.length) ? 'random-products-wrapper' : 'random-products-wrapper--empty'}>
         <div className="random-products__title">{title}</div>

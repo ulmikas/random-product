@@ -4,13 +4,13 @@ import './styles/index.css';
 import { getProductsIds } from './api';
 
 
-const test = (products, count = 1) => {
+const randomProductsUpdate = (products, count = 1) => {
   return getRandomProducts(products, count);
 };
 
-function init(allProducts, rp, count = 1, apiSettings, container) {
+function init(allProducts, rp, appSettings, apiSettings, container) {
 	let App = require('./components/app').default;
-	render(<App products={allProducts} items={rp} count={count} settings={apiSettings} rpUpdate={test} />, container);
+	render(<App products={allProducts} items={rp} count={appSettings.maxShown} title={appSettings.title} settings={apiSettings} rpUpdate={randomProductsUpdate} />, container);
 }
 
 // register ServiceWorker via OfflinePlugin, for prod only:
@@ -26,7 +26,6 @@ if (module.hot) {
 
 const Ecwid = window.Ecwid;
 
-
 const getRandomProducts = (products, count = 1) => {
   let productsIds = products;
   let random = [];
@@ -41,12 +40,13 @@ const getRandomProducts = (products, count = 1) => {
 
 const appInit = async (apiSettings, appSettings) => {
   const products = await getProductsIds(apiSettings.storeId, apiSettings.token);
-  const randomProducts = getRandomProducts(products, 3);
+  const randomProducts = getRandomProducts(products, appSettings.maxShown);
 
   if (!products || randomProducts.length === 0) {
     return;
   }
 
+  const appTitle = appSettings.title || '';
   const appPlace = appSettings.place || 'above';
   const appContainer = (appSettings.place === 'custom' && appSettings.container) ? appSettings.container : '.ecwid-productBrowser';
   const randProductWrapper = document.querySelector(appContainer);
@@ -60,13 +60,13 @@ const appInit = async (apiSettings, appSettings) => {
       randProductContainer.parentElement.remove(randProductContainer);
     }
 
-    if (appPlace !== 'above') {
+    if (appPlace === 'above') {
 			randProductWrapper.insertBefore(randProductContainer, randProductWrapper.childNodes[0]);
 		} else {
 			randProductWrapper.appendChild(randProductContainer);
     }
     
-    init(products, randomProducts, 3, apiSettings, randProductContainer);
+    init(products, randomProducts, appSettings, apiSettings, randProductContainer);
   }
 };
 
@@ -77,9 +77,10 @@ Ecwid.OnAPILoaded.add(() => {
 		lang: Ecwid.getStorefrontLang()
   };
 
-  const appId = 'recently-viewed-products';
-  const appSettings = (Ecwid.getAppPublicConfig(appId) === '') ? { place: 'above' } : JSON.parse(Ecwid.getAppPublicConfig(appId));
+  const appId = 'random-products';
+  const jsonConfig = Ecwid.getAppPublicConfig(appId);
+  const settings = (!jsonConfig || jsonConfig === '') ? { maxShown: 1, place: 'above' } : JSON.parse(jsonConfig);
   
-  appInit(apiSettings, appSettings);
+  appInit(apiSettings, settings);
 
 });

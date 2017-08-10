@@ -1,23 +1,15 @@
 (() => {
   EcwidApp.init({
-    app_id: '',
+    app_id: 'random-products',
     autoloadedflag: true,
     autoheight: true,
   });
-
-  class Settings {
-    constructor(limit, place, container) {
-      this.maxItems = 1;
-      this.maxShown = limit || this.maxItems;
-      this.place = place || 'above';
-      this.container = container || '.ecwid-productBrowser';
-    }
-  }
 
   const labels = {
     en: {
       'random-product-title': 'Random Products',
       'random-product-legend': 'Settings',
+      'random-product-widget-title': 'Title',
       'random-product-max-shown': 'Max products shown (< 6)',
       'random-product-place': 'Place for Random Products',
       'random-product-save': 'Save',
@@ -30,6 +22,7 @@
     ru: {
       'random-product-title': 'Случайные товары',
       'random-product-legend': 'Настройки',
+      'random-product-widget-title': 'Заголовок',
       'random-product-max-shown': 'Максимальное количество (< 6)',
       'random-product-place': 'Размещение виджета',
       'random-product-save': 'Сохранить',
@@ -41,10 +34,22 @@
     }
   };
 
+  class Settings {
+    constructor(title, limit, place, container) {
+      this.maxItems = 5;
+      this.maxShown = limit || this.maxItems;
+      this.place = place || 'above';
+      this.container = container || '.ecwid-productBrowser';
+      this.title = title;
+    }
+  }
+
   const setLabel = sel => lbls => { document.querySelector('#' + sel).innerText = lbls[sel]; };
 
   const setLabels = (lbls) => {
-    ['random-product-title', 'random-product-legend', 'random-product-max-shown', 'random-product-place', 'random-product-save', 'random-product-custom-selector']
+    ['random-product-title', 'random-product-legend', 'random-product-max-shown',
+    'random-product-place', 'random-product-save', 'random-product-custom-selector',
+    'random-product-widget-title']
       .forEach(i => setLabel(i)(lbls));
     document.querySelector('#random-product-place-select').options[0].innerText = lbls['random-product-above'];
     document.querySelector('#random-product-place-select').options[1].innerText = lbls['random-product-under'];
@@ -63,8 +68,10 @@
 
   EcwidApp.getAppStorage('public', (value) => {
     const param = JSON.parse(value);
-    const rvpSettings = new Settings(param.maxShown, param.place, param.container);
+    const rvpSettings = new Settings(param.title, param.maxShown, param.place, param.container);
+    console.log(rvpSettings);
 
+    rvpForm.title.value = rvpSettings.title;
     rvpForm.maximum.value = rvpSettings.maxShown;
     rvpForm.querySelector('#random-product-place-select').value = rvpSettings.place;
     rvpForm.selector.value = rvpSettings.container;
@@ -88,17 +95,19 @@
   rvpForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const newSettings = {
+      title: e.target.title.value,
       maxShown: e.target.maximum.value,
       place: e.target.querySelector('#random-product-place-select').value,
       container: e.target.selector.value,
     };
+
     EcwidApp.setAppPublicConfig(JSON.stringify(newSettings), () => {
       let alertMsg = document.querySelector('#random-product-settings .random-product-settings-saved-alert');
       if (!alertMsg) {
         alertMsg = document.createElement('div');
         alertMsg.className = 'random-product-settings-saved-alert';
         alertMsg.innerHTML = '<br/><div>' + labels[lang]['random-product-saved'] + '</div>';
-        document.querySelector('#random-product-settings').appendChild(alertMsg);
+        document.querySelector('#random-settings').appendChild(alertMsg);
       }
       setTimeout(() => {
         alertMsg.remove();

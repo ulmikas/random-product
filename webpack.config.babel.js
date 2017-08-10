@@ -8,8 +8,8 @@ import OfflinePlugin from 'offline-plugin';
 import path from 'path';
 import V8LazyParseWebpackPlugin from 'v8-lazy-parse-webpack-plugin';
 import ScriptExtHtmlWebpackPlugin from "script-ext-html-webpack-plugin";
-const ENV = process.env.NODE_ENV || 'development';
 
+const ENV = process.env.NODE_ENV || 'development';
 const CSS_MAPS = ENV!=='production';
 
 module.exports = {
@@ -21,7 +21,7 @@ module.exports = {
 
 	output: {
 		path: path.resolve(__dirname, "build"),
-		publicPath: '/',
+		publicPath: '',
 		filename: "[name].js"
 	},
 
@@ -106,7 +106,6 @@ module.exports = {
 			filename: 'index-storefront.html',
 			chunks: ['random-product'],
 			minify: { collapseWhitespace: true },
-			disable: ENV==='production'
 		}),
 		new HtmlWebpackPlugin({
 			template: './index.ejs',

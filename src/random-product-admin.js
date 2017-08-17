@@ -8,48 +8,55 @@
   const labels = {
     en: {
       'random-product-title': 'Random Products',
-      'random-product-legend': 'Settings',
       'random-product-widget-title': 'Title',
-      'random-product-max-shown': 'Max products shown (< 6)',
+      'random-product-count': 'Number of products shown',
+      'random-product-offstock': 'Show out of stock products',
+      'random-product-thumbnail': 'Thumbnail size',
       'random-product-place': 'Place for Random Products',
+      'random-product-layout': 'Product layout template',
       'random-product-save': 'Save',
       'random-product-above': 'Above Storefront',
       'random-product-under': 'Under Storefront',
       'random-product-custom': 'Custom container',
       'random-product-saved': 'Settings were successfully saved!',
-      'random-product-custom-selector': 'CSS Selector',
+      'random-product-custom-selector': 'CSS Selector'
     },
     ru: {
       'random-product-title': 'Случайные товары',
-      'random-product-legend': 'Настройки',
       'random-product-widget-title': 'Заголовок',
-      'random-product-max-shown': 'Максимальное количество (< 6)',
+      'random-product-count': 'Количество показываемых товаров',
+      'random-product-offstock': 'Показвать товары, которых нет в наличии',
+      'random-product-thumbnail': 'Размер картинок',
       'random-product-place': 'Размещение виджета',
+      'random-product-layout': 'Шаблон виждета',
       'random-product-save': 'Сохранить',
       'random-product-above': 'Над товарами',
       'random-product-under': 'Под товарами',
       'random-product-custom': 'Другой контейнер',
       'random-product-saved': 'Настройки успешно сохранены!',
-      'random-product-custom-selector': 'CSS селектор',
+      'random-product-custom-selector': 'CSS селектор'
     }
   };
 
   class Settings {
-    constructor(title, limit, place, container) {
-      this.maxItems = 5;
-      this.maxShown = limit || this.maxItems;
-      this.place = place || 'above';
-      this.container = container || '.ecwid-productBrowser';
-      this.title = title;
+    constructor(settings) {
+      this.title = settings.title;
+      this.category = settings.category || 'all';
+      this.count = settings.count || 1;
+      this.offstock = settings.offstock || false;
+      this.thumbSize = settings.thumbSize || 150;
+      this.place = settings.place || 'above';
+      this.container = settings.container || '.ecwid-productBrowser';
+      this.layout = settings.layout || '';
     }
   }
 
   const setLabel = sel => lbls => { document.querySelector('#' + sel).innerText = lbls[sel]; };
 
   const setLabels = (lbls) => {
-    ['random-product-title', 'random-product-legend', 'random-product-max-shown',
-    'random-product-place', 'random-product-save', 'random-product-custom-selector',
-    'random-product-widget-title']
+    ['random-product-title', 'random-product-widget-title', 'random-product-count', 'random-product-offstock',
+     'random-product-thumbnail', 'random-product-place', 'random-product-layout',
+     'random-product-save', 'random-product-custom-selector']
       .forEach(i => setLabel(i)(lbls));
     document.querySelector('#random-product-place-select').options[0].innerText = lbls['random-product-above'];
     document.querySelector('#random-product-place-select').options[1].innerText = lbls['random-product-under'];
@@ -68,19 +75,23 @@
 
   EcwidApp.getAppStorage('public', (value) => {
     const param = JSON.parse(value);
-    const rvpSettings = new Settings(param.title, param.maxShown, param.place, param.container);
+    const rvpSettings = new Settings(param);
     console.log(rvpSettings);
 
     rvpForm.title.value = rvpSettings.title;
-    rvpForm.maximum.value = rvpSettings.maxShown;
+    // rvpForm.category.value = rvpSettings.category;
+    rvpForm.count.value = rvpSettings.count;
+    rvpForm.offstock.checked = rvpSettings.offstock;
+    rvpForm.thumbnail.value = rvpSettings.thumbSize;
+    rvpForm.layout.value = rvpSettings.layout;
     rvpForm.querySelector('#random-product-place-select').value = rvpSettings.place;
     rvpForm.selector.value = rvpSettings.container;
     customContainer(rvpSettings.place);
 
-    rvpForm.maximum.addEventListener('change', (e) => {
-      const val = parseInt(e.target.value, 10);
-      rvpForm.maximum.value = (val > 0 && val < 5) ? val : rvpSettings.maxItems;
-    });
+    // rvpForm.count.addEventListener('change', (e) => {
+    //   const val = parseInt(e.target.value, 10);
+    //   rvpForm.maximum.value = (val > 0 && val < 5) ? val : rvpSettings.maxItems;
+    // });
 
     rvpForm.selector.addEventListener('change', (e) => {
       if (e.target.value === '') {
@@ -94,12 +105,19 @@
 
   rvpForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const newSettings = {
+    const newSettings =  {
       title: e.target.title.value,
-      maxShown: e.target.maximum.value,
+      // category: e.target.category.value,
+      count: e.target.count.value,
+      offstock: e.target.offstock.checked,
+      thumbSize: e.target.thumbnail.value,
+      layout: e.target.layout.value,
       place: e.target.querySelector('#random-product-place-select').value,
-      container: e.target.selector.value,
+      container: e.target.selector.value
     };
+
+    console.log(newSettings);
+
 
     EcwidApp.setAppPublicConfig(JSON.stringify(newSettings), () => {
       let alertMsg = document.querySelector('#random-product-settings .random-product-settings-saved-alert');

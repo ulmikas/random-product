@@ -7,11 +7,12 @@ class Product extends Component {
     super(props);
 
     this.state = {
+      visible: true,
       name: '',
       url: '',
+      dataurl: '',
       img: '',
-      price: '',
-      visible: true,
+      price: ''
     };
   }
 
@@ -25,7 +26,7 @@ class Product extends Component {
           url: data.url,
           dataurl: ((typeof Wix === 'undefined') ? "#" : "") + "!/p/" + data.id,
           img: data.thumbnailUrl,
-          price: Ecwid.formatCurrency(data.priceInProductList),
+          price: Ecwid.formatCurrency(data.priceInProductList)
         });
       });
   }
@@ -33,28 +34,42 @@ class Product extends Component {
   render() {
     const visibility = (this.state.visible)? '' : 'display: none;';
     const cln = `random-product random-product--${this.props.id}`;
+  
     return (
       <div className={cln} style={visibility}>
-        <a className="random-product__url" data-url={this.state.dataurl} href={this.state.url} onClick={this.onClick}>
-          <div className="random-product__thumb">
-            <img alt="" src={this.state.img} />
-          </div>
-          <div className="random-product__name">{this.state.name}</div>
-          <div className="random-product__price ecwid-productBrowser-price">
-            {this.state.price}
-          </div>
-        </a>
+        <div onClick={this.onClick} dangerouslySetInnerHTML={this.makeLayout()} />
       </div>
     );
+  }
+
+  makeLayout = () => {
+    const values = {
+      img: `<span class="random-product__thumb" ${this.props.thumbSize ? `style="max-width:${this.props.thumbSize}px; max-height:${this.props.thumbSize}px;"` : ''}><img alt="" src=${this.state.img} /></span>`,
+      link: this.state.url,
+      data_link: this.state.dataurl,
+      name: `<span class="random-product__name">${this.state.name}</span>`,
+      price: `<span class="random-product__price ecwid-productBrowser-price">${this.state.price}</span>`,
+      click: this.onClick
+    };
+    
+    const classNames = this.props.layout.match(/^<a.*class="(.*?)"/);
+    const newClassNames = (classNames) ? `${classNames} random-product__url` : 'random-product__url';
+    const layout = this.props.layout.replace(/<a/, `<a class="${newClassNames}" data-url="{data_link}" href="{link}" `);
+    const replaceValue = (str, match) => console.log(match) || (values[match] || '');
+
+    return { __html: layout.replace(/\{(.*?)\}/g, replaceValue) };
   }
 
   onClick(e) {
     e.preventDefault();
     e.stopPropagation();
-    if (typeof Wix === 'undefined') {
-      document.location.hash = e.currentTarget.dataset.url;
-    } else {
-      Wix.pushState(e.currentTarget.dataset.url);
+    const link = e.currentTarget.querySelector('a.random-product__url');
+    if (link) {
+      if (typeof Wix === 'undefined') {
+        document.location.hash = link.dataset.url;
+      } else {
+        Wix.pushState(link.dataset.url);
+      }
     }
   }
 }

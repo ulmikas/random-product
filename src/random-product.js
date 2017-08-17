@@ -3,46 +3,35 @@ import { h, render } from 'preact';
 import './styles/index.css';
 import { getProductsIds } from './api';
 
+function init(allProducts, appSettings, apiSettings, container) {
+  const getRandomProducts = (count = 1) => {
+    let productsIds = allProducts;
+    let random = [];
+    while (random.length < count && productsIds.length) {
+      const rand = Math.floor(Math.random() * productsIds.length);
+      const randId = productsIds[rand];
+      random = [...random, ...randId];
+      productsIds = [...productsIds.slice(0, rand), ...productsIds.slice(rand+1)];
+    }
+    return random;
+  };
 
-const randomProductsUpdate = (products, count = 1) => {
-  return getRandomProducts(products, count);
-};
+  const randomProducts = getRandomProducts(appSettings.count);
+  if (randomProducts.length === 0) {
+    return;
+  }
 
-function init(allProducts, rp, appSettings, apiSettings, container) {
 	let App = require('./components/app').default;
-	render(<App products={allProducts} items={rp} count={appSettings.maxShown} title={appSettings.title} settings={apiSettings} rpUpdate={randomProductsUpdate} />, container);
-}
-
-// register ServiceWorker via OfflinePlugin, for prod only:
-if (process.env.NODE_ENV==='production') {
-	require('./pwa');
-}
-
-// in development, set up HMR:
-if (module.hot) {
-	require('preact/devtools');   // turn this on if you want to enable React DevTools!
-	module.hot.accept('./components/app', () => requestAnimationFrame(init));
+	render(<App items={randomProducts} appSettings={appSettings} apiSettings={apiSettings} rpUpdate={getRandomProducts} />, container);
 }
 
 const Ecwid = window.Ecwid;
 
-const getRandomProducts = (products, count = 1) => {
-  let productsIds = products;
-  let random = [];
-  while (random.length < count && productsIds.length) {
-    const rand = Math.floor(Math.random() * productsIds.length);
-    const randId = productsIds[rand];
-    random = [...random, ...randId];
-    productsIds = [...productsIds.slice(0, rand), ...productsIds.slice(rand+1)];
-  }
-  return random;
-};
-
 const appInit = async (apiSettings, appSettings) => {
-  const products = await getProductsIds(apiSettings.storeId, apiSettings.token);
-  const randomProducts = getRandomProducts(products, appSettings.maxShown);
-
-  if (!products || randomProducts.length === 0) {
+  const products = await getProductsIds(apiSettings.storeId, apiSettings.token, appSettings.category, appSettings.offstock);
+  
+  console.log( products, appSettings);
+  if (!products) {
     return;
   }
 
@@ -66,7 +55,7 @@ const appInit = async (apiSettings, appSettings) => {
 			randProductWrapper.appendChild(randProductContainer);
     }
     
-    init(products, randomProducts, appSettings, apiSettings, randProductContainer);
+    init(products, appSettings, apiSettings, randProductContainer);
   }
 };
 
@@ -79,7 +68,9 @@ Ecwid.OnAPILoaded.add(() => {
 
   const appId = 'random-products';
   const jsonConfig = Ecwid.getAppPublicConfig(appId);
-  const settings = (!jsonConfig || jsonConfig === '') ? { maxShown: 1, place: 'above' } : JSON.parse(jsonConfig);
+  const settings = (!jsonConfig || jsonConfig === '')
+    ? { title: '', category: 'all', count: 1, offstock: false, thumbSize: 150, layout: '', place: 'above' }
+    : JSON.parse(jsonConfig);
   
   appInit(apiSettings, settings);
 

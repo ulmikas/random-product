@@ -96,7 +96,7 @@ module.exports = {
 		new webpack.NoErrorsPlugin(),
 		new ExtractTextPlugin('random-product.css', {
 			allChunks: true,
-			// disable: ENV!=='production'
+			disable: ENV!=='production'
 		}),
 		new webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify(ENV)

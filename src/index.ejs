@@ -60,6 +60,10 @@
             #random-settings .select-wrap .form-control {
                 width: 100%;
             }
+            #random-product-layout {
+                resize: vertical;
+                min-height: 140px;
+            }
         }
     </style>
 </head>
@@ -67,16 +71,34 @@
 <body>
     <div class="random-settings-container normalized">
         <h2 id="random-product-title">Random Products</h2>
-        <h3 id="random-product-legend">Settings</h3>
+        <!-- <h3 id="random-product-legend">Settings</h3> -->
         <div>
             <form id="random-settings" name="random-settings">
                 <div>
                     <label id="random-product-widget-title">Title</label>
-                    <input class="form-control input-medium" name="title" type="text" value="Random Products">
+                    <input class="form-control input-medium" name="title" type="text" value="Other great products">
+                </div>
+                <!-- <div>
+                    <label id="random-product-category">Category</label>
+                    <div class="select-wrap">
+                        <select class="form-control input-medium" name="category">
+                            <option value="all" selected>All categories</option>
+                            <option value="1111">1111</option>
+                        </select>
+                    </div>
+                </div> -->
+                <div>
+                    <label id="random-product-count">Number of products shown</label>
+                    <input class="form-control input-medium" name="count" type="number" value="1">
                 </div>
                 <div>
-                    <label id="random-product-max-shown">Max products shown (&lt;&nbsp;6)</label>
-                    <input class="form-control input-medium" name="maximum" type="text" value="1">
+                    <label id="random-product-offstock">Show out of stock products</label>
+                    <input class="" id="random-product-offstock" name="offstock" type="checkbox">
+                </div>
+                <div>
+                    <label id="random-product-thumbnail">Thumbnail size</label>
+                    <input class="form-control input-medium" style="max-width: 80px;" name="thumbnail" type="number">
+                    <span>px</span>
                 </div>
                 <div>
                     <label id="random-product-place">Place for Random Products</label>
@@ -91,6 +113,16 @@
                       <label id="random-product-custom-selector">Container</label>
                       <input class="form-control input-medium" name="selector" type="text" >
                     </div>
+                </div>
+                <div>
+                    <label id="random-product-layout">Product layout template</label>
+                    <textarea class="form-control input-medium" id="random-product-layout" name="layout">
+<a href="{link}">
+  {img}
+  {name}
+  {price}
+</a>
+                    </textarea>
                 </div>
 
                 <button id="random-product-save" type="submit" class="btn btn-primary btn-medium">Save</button>

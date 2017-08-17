@@ -10,14 +10,8 @@
 	display: flex;
 	flex-direction: row;
 	margin: 10px 0;
-	overflow: hidden;
-	flex-wrap: nowrap;
-}
-
-#random-products.rvp-products--vertical #random-products-wrapper #random-products__list {
-	flex-direction: column;
-	margin: auto;
-	max-width: 150px;
+	/* overflow: hidden; */
+	flex-wrap: wrap;
 }
 
 #random-products #random-products-wrapper #random-products__list .random-product {
@@ -32,13 +26,17 @@
 
 #random-products #random-products-wrapper #random-products__list .random-product__name {
 	color: #333;
-	font-size: 14px;
+	display: block;
+	font-size: 16px;
+	font-weight: 600;
 	min-height: 44px;
 	padding-top: 6px;
 	text-align: center;
 }
 
 #random-products #random-products-wrapper #random-products__list .random-product__price {
+	display: block;
+	color: #333;
 	font-size: 18px;
 	min-height: 26px;
 	padding-top: 4px;
@@ -50,10 +48,11 @@
 }
 
 #random-products #random-products-wrapper #random-products__list .random-product .random-product__thumb {
-	height: 200px;
+	/* height: 200px; */
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	margin: auto;
 }
 
 #random-products #random-products-wrapper #random-products__list .random-product .random-product__thumb img {
@@ -67,6 +66,7 @@
 	}
 	#random-products #random-products-wrapper #random-products__list .random-product {
 		flex: 1 0 25%;
+		max-width: 25%;
 	}
 }
 
@@ -85,7 +85,7 @@
 	}
 
 	#random-products #random-products-wrapper #random-products__list .random-product__name {
-		font-size: 16px;
+		font-size: 18px;
 	}
 
 	#random-products #random-products-wrapper #random-products__list .random-product__price {

@@ -3,7 +3,7 @@ import axios from 'axios';
 const urlAPI = 'https://app.ecwid.com/api/v3/';
 const maxProducts = 100;
 
-const getUrl = (storeId, token) => `${urlAPI}${storeId}/products?token=${token}&inStock=true&enabled=true`;
+const getUrl = (storeId, token) => `${urlAPI}${storeId}/products?token=${token}&enabled=true`;
 
 const getTotalCount = async (storeId, token) => {
   const total = await axios
@@ -12,14 +12,16 @@ const getTotalCount = async (storeId, token) => {
   return total;
 };
 
-const getAllProducts = async (storeId, token) => {
+const getAllProducts = async (storeId, token, cat, offstock) => {
   let offset = 0;
   let items = [];
   let promises = [];
   const totalProducts = await getTotalCount(storeId, token);
+  const category = (!cat || cat === 'all') ? '' : `&category=${cat}`;
+  const inStock = (offstock) ? '' : '&inStock=true';
   do {
     const products = axios
-      .get(`${getUrl(storeId, token)}&offset=${offset}&limit=${maxProducts}`)
+      .get(`${getUrl(storeId, token)}&offset=${offset}${category}${inStock}&limit=${maxProducts}`)
       .then(response => response.data.items);
     promises = [...promises, ...products];
     offset += maxProducts;
@@ -28,9 +30,9 @@ const getAllProducts = async (storeId, token) => {
   return items.reduce((prev, cur) => [...prev, ...cur], []);
 };
 
-const getProductsIds = async (storeId, token) => {
+const getProductsIds = async (storeId, token, cat, offstock) => {
   try {
-    const products = await getAllProducts(storeId, token).then(products => products.map(p => p.id));
+    const products = await getAllProducts(storeId, token, cat, offstock).then(products => products.map(p => p.id));
     return products;
   } catch (err) {
     console.log(err);

@@ -8,7 +8,6 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    console.log(this.props);
     this.state = {
       rp: this.props.items,
     };
@@ -38,6 +37,7 @@ class App extends Component {
               id={item}
               layout={this.props.appSettings.layout}
               thumbSize={this.props.appSettings.thumbSize}
+              callback={this.props.callback}
             />)}
         </div>
       </div>

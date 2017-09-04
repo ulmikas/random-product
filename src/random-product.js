@@ -22,15 +22,14 @@ function init(allProducts, appSettings, apiSettings, container) {
   }
 
 	let App = require('./components/app').default;
-	render(<App items={randomProducts} appSettings={appSettings} apiSettings={apiSettings} rpUpdate={getRandomProducts} />, container);
+  render(<App items={randomProducts} appSettings={appSettings} apiSettings={apiSettings} rpUpdate={getRandomProducts} callback={window.randprod && window.randprod.callback} />, container);
 }
 
 const Ecwid = window.Ecwid;
 
 const appInit = async (apiSettings, appSettings) => {
   const products = await getProductsIds(apiSettings.storeId, apiSettings.token, appSettings.category, appSettings.offstock);
-  
-  console.log( products, appSettings);
+
   if (!products) {
     return;
   }

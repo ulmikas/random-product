@@ -31,6 +31,12 @@ class Product extends Component {
       });
   }
 
+  componentDidUpdate() {
+    const event = document.createEvent('Event');
+    event.initEvent('productRendered', true, true);
+    this.base.dispatchEvent(event);
+  }
+
   render() {
     const visibility = (this.state.visible)? '' : 'display: none;';
     const cln = `random-product random-product--${this.props.id}`;
@@ -55,7 +61,7 @@ class Product extends Component {
     const classNames = this.props.layout.match(/^<a.*class="(.*?)"/);
     const newClassNames = (classNames) ? `${classNames} random-product__url` : 'random-product__url';
     const layout = this.props.layout.replace(/<a/, `<a class="${newClassNames}" data-url="{data_link}" href="{link}" `);
-    const replaceValue = (str, match) => console.log(match) || (values[match] || '');
+    const replaceValue = (str, match) => (values[match] || '');
 
     return { __html: layout.replace(/\{(.*?)\}/g, replaceValue) };
   }

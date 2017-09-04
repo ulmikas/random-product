@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,10 +10,10 @@
     <script src="https://djqizrxa6f10j.cloudfront.net/ecwid-sdk/js/1.1.0/gz/ecwid-app.js"></script>
 
     <style>
-        #random-settings div {
+        #random-settings>div {
             margin-bottom: 16px;
         }
-
+        
         #random-settings label {
             display: block;
             font-weight: 600;
@@ -21,36 +22,67 @@
             vertical-align: middle;
             width: 100%;
         }
-
+        
         #random-settings .form-control {
-            display: block;
+            display: inline-block;
             vertical-align: middle;
             width: 100%;
         }
-
+        
+        #random-settings .select-wrap {
+            width: 100%;
+        }
+        
+        .random-settings-container.loading {
+            display: none;
+        }
+        
         .random-settings-container {
+            display: block;
             max-width: 600px;
             margin: 30px auto;
             padding: 20px;
         }
-
+        
         .random-settings-container h2 {
             font-weight: 600;
             margin-bottom: 50px;
         }
-
+        
         .random-settings-container h3 {
             font-weight: 600;
             margin-bottom: 20px;
         }
+        
+        .random-settings-container textarea {
+            min-height: 140px;
+        }
+        
+        .random-settings-container .random-product-note {
+            font-size: 12px;
+            font-weight: 400;
+        }
+        
+        .random-settings-container .random-product-note p {
+            margin-bottom: 0;
+            margin-top: 4px;
+        }
+        
+        .random-settings-container #random-settings textarea {
+            vertical-align: top;
+        }
 
+        #random-product-custom-selector-container {
+            margin-top: 8px;
+        }
+        
         @media screen and (min-width: 768px) {
             #random-settings label {
                 display: inline-block;
                 width: 35%;
             }
             #random-settings .form-control {
-                display: inline-block;
+                /* display: inline-block; */
                 width: 60%;
             }
             #random-settings .select-wrap {
@@ -60,23 +92,23 @@
             #random-settings .select-wrap .form-control {
                 width: 100%;
             }
-            #random-product-layout {
+            /* #random-product-layout {
                 resize: vertical;
                 min-height: 140px;
-            }
+            } */
         }
     </style>
 </head>
 
 <body>
-    <div class="random-settings-container normalized">
+    <div class="random-settings-container normalized loading">
         <h2 id="random-product-title">Random Products</h2>
         <!-- <h3 id="random-product-legend">Settings</h3> -->
         <div>
             <form id="random-settings" name="random-settings">
                 <div>
                     <label id="random-product-widget-title">Title</label>
-                    <input class="form-control input-medium" name="title" type="text" value="Other great products">
+                    <input id="random-product-widget-placeholder" class="form-control input-medium" name="title" type="text">
                 </div>
                 <!-- <div>
                     <label id="random-product-category">Category</label>
@@ -89,11 +121,16 @@
                 </div> -->
                 <div>
                     <label id="random-product-count">Number of products shown</label>
-                    <input class="form-control input-medium" name="count" type="number" value="1">
+                    <input class="form-control input-medium" name="count" type="number">
                 </div>
                 <div>
                     <label id="random-product-offstock">Show out of stock products</label>
-                    <input class="" id="random-product-offstock" name="offstock" type="checkbox">
+                    <label class="checkbox tiny">
+                        <input type="checkbox" id="random-product-offstock" name="offstock">
+                        <div data-on="enabled" data-off="disabled">
+                            <div></div>
+                        </div>
+                    </label>
                 </div>
                 <div>
                     <label id="random-product-thumbnail">Thumbnail size</label>
@@ -110,22 +147,24 @@
                         </select>
                     </div>
                     <div id='random-product-custom-selector-container' style="display: none;">
-                      <label id="random-product-custom-selector">Container</label>
-                      <input class="form-control input-medium" name="selector" type="text" >
+                        <label id="random-product-custom-selector">Container</label>
+                        <input class="form-control input-medium" name="container" type="text">
                     </div>
                 </div>
                 <div>
-                    <label id="random-product-layout">Product layout template</label>
-                    <textarea class="form-control input-medium" id="random-product-layout" name="layout">
-<a href="{link}">
-  {img}
-  {name}
-  {price}
-</a>
-                    </textarea>
+                    <label>
+                        <div id="random-product-layout">Product layout template</div>
+                        <div class="random-product-note">
+                            <p>{name} – product name</p>
+                            <p>{link} – URL to product page</p>
+                            <p>{price} – product price</p>
+                            <p>{image} – complete <img> element</p>
+                        </div>
+                    </label>
+                    <textarea class="form-control input-medium" name="layout"></textarea>
                 </div>
 
-                <button id="random-product-save" type="submit" class="btn btn-primary btn-medium">Save</button>
+                <!-- <button id="random-product-save" type="submit" class="btn btn-primary btn-medium">Save</button> -->
             </form>
         </div>
     </div>

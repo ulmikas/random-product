@@ -36,7 +36,7 @@ class App extends Component {
               url={`https://app.ecwid.com/api/v3/${this.props.apiSettings.storeId}/products/${item}?token=${this.props.apiSettings.token}`}
               id={item}
               layout={this.props.appSettings.layout}
-              thumbSize={this.props.appSettings.thumbSize}
+              thumbSize={this.props.appSettings.thumbnail}
               callback={this.props.callback}
             />)}
         </div>

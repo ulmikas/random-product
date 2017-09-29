@@ -28,6 +28,16 @@
             width: 100%;
         }
 
+        .random-settings-container .random-product-settings-saved-alert {
+            margin-bottom: 20px;
+            opacity: 0;
+            transition: opacity 150ms ease-out;
+        }
+
+        .random-settings-container .random-product-settings-saved-alert--shown {
+            opacity: 1;
+        }
+
         .random-settings-container {
             max-width: 600px;
             margin: 30px auto;
@@ -36,7 +46,7 @@
 
         .random-settings-container h2 {
             font-weight: 600;
-            margin-bottom: 50px;
+            margin-bottom: 20px;
         }
 
         .random-settings-container h3 {
@@ -68,6 +78,11 @@
     <div class="random-settings-container normalized">
         <h2 id="random-products-title">Random Products</h2>
         <h3 id="random-products-legend">Settings</h3>
+        <div class="random-product-settings-saved-alert">
+            <div class="alert alert-success">
+                <div class="title">Settings were successfully saved!</div>
+            </div>
+        </div>
         <div>
             <form id="random-settings" name="random-settings">
                 <div>

@@ -50,7 +50,7 @@ class Product extends Component {
 
   makeLayout = () => {
     const values = {
-      img: `<span class="random-product__thumb" ${this.props.thumbSize ? `style="max-width:${this.props.thumbSize}px; max-height:${this.props.thumbSize}px;"` : ''}><img alt="" src=${this.state.img} /></span>`,
+      img: `<span class="random-product__thumb" style="width:${this.props.thumbSize}px; height:${this.props.thumbSize}px;"><img alt="" src=${this.state.img} /></span>`,
       link: this.state.url,
       data_link: this.state.dataurl,
       name: `<span class="random-product__name">${this.state.name}</span>`,

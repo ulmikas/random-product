@@ -70,18 +70,15 @@
         el.style.display = (value === 'custom') ? 'block' : 'none';
     };
 
-    const saveSettings = (newSettings) => {
+    const saveSettings = (newSettings, showAlert) => {
         EcwidApp.setAppPublicConfig(JSON.stringify(newSettings), () => {
-            let alertMsg = document.querySelector('#random-settings .random-product-settings-saved-alert');
-            if (!alertMsg) {
-                alertMsg = document.createElement('div');
-                alertMsg.className = 'random-product-settings-saved-alert';
-                alertMsg.innerHTML = '<br/><div>' + labels[lang]['random-product-saved'] + '</div>';
-                document.querySelector('#random-settings').appendChild(alertMsg);
-            }
+            if (!showAlert) return;
+            const alertMsg = document.querySelector('.random-settings-container .random-product-settings-saved-alert');
+            alertMsg.querySelector('.title').innerHTML = labels[lang]['random-product-saved'];
+            alertMsg.classList.add('random-product-settings-saved-alert--shown');
             setTimeout(() => {
-                alertMsg.remove();
-            }, 5000);
+                alertMsg.classList.remove('random-product-settings-saved-alert--shown');
+            }, 3000);
         });
     };
 
@@ -95,7 +92,7 @@
     EcwidApp.getAppStorage('public', (value) => {
         const param = (value && JSON.parse(value)) || {};
         const rvpSettings = Object.assign({}, settings, param);
-        saveSettings(rvpSettings);
+        saveSettings(rvpSettings, false);
 
         rvpForm.title.value = rvpSettings.title;
         // rvpForm.category.value = rvpSettings.category;
@@ -126,7 +123,8 @@
     const lang = (EcwidApp.getPayload().lang === 'ru') ? 'ru' : 'en';
     setLabels(labels[lang]);
 
-    rvpForm.addEventListener('change', () => {
+    rvpForm.addEventListener('submit', (e) => {
+        e.preventDefault();
         const newSettings = {
             title: rvpForm.title.value,
             // category: rvpForm.category.value,
@@ -138,6 +136,6 @@
             container: rvpForm.container.value
         };
 
-        saveSettings(newSettings);
+        saveSettings(newSettings, true);
     });
 })();

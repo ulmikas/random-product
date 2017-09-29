@@ -32,6 +32,8 @@
 	min-height: 44px;
 	padding-top: 6px;
 	text-align: center;
+	word-break: break-all;
+	word-wrap: break-word;
 }
 
 #random-products #random-products-wrapper #random-products__list .random-product__price {
@@ -53,6 +55,7 @@
 	align-items: center;
 	justify-content: center;
 	margin: auto;
+	max-width: 100%;
 }
 
 #random-products #random-products-wrapper #random-products__list .random-product .random-product__thumb img {

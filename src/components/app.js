@@ -1,6 +1,6 @@
 import {h, Component } from 'preact';
 import Product from './Product';
-// import { titles } from '../texts';
+import { getProductsIds } from '../api';
 
 const Ecwid = window.Ecwid;
 
@@ -9,16 +9,29 @@ class App extends Component {
     super(props);
 
     this.state = {
-      rp: this.props.items,
+      prooductsIds: [],
+      rp: []
     };
   }
 
   componentWillMount() {
-    Ecwid.OnPageLoad.add((page) => {
-      this.setState({
-        rp: this.props.rpUpdate(this.props.appSettings.count)
+    const count = parseInt(this.props.appSettings.count, 10);
+    const categories = (this.props.appSettings.categories === 'all')
+      ? []
+      : this.props.appSettings.categories.split(',').map(i => Number(i));
+    getProductsIds(this.props.apiSettings.storeId, this.props.apiSettings.token, categories, this.props.appSettings.offstock)
+      .then(res => {
+        this.setState({
+          prooductsIds: res,
+          rp: this.getRandomProducts(count)
+        });
+
+        Ecwid.OnPageLoad.add((page) => {
+          this.setState({
+            rp: this.getRandomProducts(count)
+          });
+        });
       });
-    });
   }
 
   render() {
@@ -44,6 +57,17 @@ class App extends Component {
     );
   }
 
+  getRandomProducts = (count = 1) => {
+    let pIds = this.state.prooductsIds;
+    let random = [];
+    while (random.length < count && pIds.length) {
+      const rand = Math.floor(Math.random() * pIds.length);
+      const randId = pIds[rand];
+      random = [...random, ...randId];
+      pIds = [...pIds.slice(0, rand), ...pIds.slice(rand+1)];
+    }
+    return random;
+  };
 }
 
 export default App;

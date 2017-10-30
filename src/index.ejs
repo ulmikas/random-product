@@ -10,11 +10,11 @@
     <script src="https://djqizrxa6f10j.cloudfront.net/ecwid-sdk/js/1.1.0/gz/ecwid-app.js"></script>
 
     <style>
-        #random-settings>div {
+        #random-settings > div {
             margin-bottom: 16px;
         }
-        
-        #random-settings label {
+
+        #random-settings div > label {
             display: block;
             font-weight: 600;
             margin-right: 16px;
@@ -22,52 +22,56 @@
             vertical-align: middle;
             width: 100%;
         }
-        
+
         #random-settings .form-control {
             display: inline-block;
             vertical-align: middle;
             width: 100%;
         }
-        
+
         #random-settings .select-wrap {
             width: 100%;
         }
-        
+
+        #random-settings #random-product-category {
+            vertical-align: top;
+        }
+
         .random-settings-container.loading {
             display: none;
         }
-        
+
         .random-settings-container {
             display: block;
             max-width: 600px;
             margin: 30px auto;
             padding: 20px;
         }
-        
+
         .random-settings-container h2 {
             font-weight: 600;
             margin-bottom: 20px;
         }
-        
+
         .random-settings-container h3 {
             font-weight: 600;
             margin-bottom: 20px;
         }
-        
+
         .random-settings-container textarea {
             min-height: 140px;
         }
-        
+
         .random-settings-container .random-product-note {
             font-size: 12px;
             font-weight: 400;
         }
-        
+
         .random-settings-container .random-product-note p {
             margin-bottom: 0;
             margin-top: 4px;
         }
-        
+
         .random-settings-container #random-settings textarea {
             vertical-align: top;
         }
@@ -82,15 +86,58 @@
             opacity: 1;
         }
 
+        .random-settings-container .selected-categories {
+            display: inline-block;
+            width: 60%;
+        }
+        .random-settings-container .selected-categories__status {
+            color: #04a2ca;
+        }
+        .random-settings-container .selected-categories__status::after {
+            background: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cg fill='%2304a2ca' fill-rule='evenodd'%3E%3Cpath d='M3.77 11.124L9.69 5.21l-.983-.985-5.92 5.915.86.193.123.79z'/%3E%3Cpath d='M10.34 5.846l-5.893 5.888-2.386.7-.494-.495.73-2.49 5.827-5.82-.707-.707L1.5 8.79c-.08.063-.146.145-.178.25l-1.24 4.227c-.055.184-.003.383.132.52.1.1.235.152.37.152.05 0 .1-.008.15-.022l4.226-1.24c.1-.03.177-.093.24-.166l5.93-5.876-.79-.79zM7.954 2.334l3.712 3.712.85-.796-3.712-3.713-.85.797zM13.492 2.28L11.712.502C11.223.01 10.43.006 9.945.492l-.546.553 3.557 3.558.547-.553c.486-.486.48-1.278-.01-1.77z'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+            content: '';
+            display: inline-block;
+            height: 16px;
+            margin-left: 8px;
+            vertical-align: middle;
+            width: 16px;
+        }
+        .random-settings-container .selected-categories__status:hover {
+            color: #006995;
+        }
+        .random-settings-container .selected-categories__status:hover::after {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cg fill='%23006995' fill-rule='evenodd'%3E%3Cpath d='M3.77 11.124L9.69 5.21l-.983-.985-5.92 5.915.86.193.123.79z'/%3E%3Cpath d='M10.34 5.846l-5.893 5.888-2.386.7-.494-.495.73-2.49 5.827-5.82-.707-.707L1.5 8.79c-.08.063-.146.145-.178.25l-1.24 4.227c-.055.184-.003.383.132.52.1.1.235.152.37.152.05 0 .1-.008.15-.022l4.226-1.24c.1-.03.177-.093.24-.166l5.93-5.876-.79-.79zM7.954 2.334l3.712 3.712.85-.796-3.712-3.713-.85.797zM13.492 2.28L11.712.502C11.223.01 10.43.006 9.945.492l-.546.553 3.557 3.558.547-.553c.486-.486.48-1.278-.01-1.77z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        .random-settings-container .selected-categories .list-dropdown {
+            display: none;
+        }
+        .random-settings-container .selected-categories .list-dropdown.opened {
+            display: block;
+        }
+        .random-settings-container .selected-categories .list-dropdown li label {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 22px;
+            padding: 8px 32px 8px 8px;
+            display: block;
+        }       
+
         #random-product-custom-selector-container {
             margin-top: 8px;
         }
-        
+
         @media screen and (min-width: 768px) {
-            #random-settings label {
+            #random-settings  div > label {
                 display: inline-block;
                 width: 35%;
             }
+
+            #random-settings label.radio,
+            #random-settings .radio label {
+                margin-left: 35%;
+                width: 65%;
+            }
+
             #random-settings .form-control {
                 /* display: inline-block; */
                 width: 60%;
@@ -125,15 +172,6 @@
                     <label id="random-product-widget-title">Title</label>
                     <input id="random-product-widget-placeholder" class="form-control input-medium" name="title" type="text">
                 </div>
-                <!-- <div>
-                    <label id="random-product-category">Category</label>
-                    <div class="select-wrap">
-                        <select class="form-control input-medium" name="category">
-                            <option value="all" selected>All categories</option>
-                            <option value="1111">1111</option>
-                        </select>
-                    </div>
-                </div> -->
                 <div>
                     <label id="random-product-count">Number of products shown</label>
                     <input class="form-control input-medium" name="count" type="number">
@@ -146,6 +184,11 @@
                             <div></div>
                         </div>
                     </label>
+                </div>
+                <div>
+                    <label id="random-product-category">Categories</label>
+                    <input class="form-control input-medium" name="categories" type="text" style="display: none;">
+                    <div class="selected-categories"></div>
                 </div>
                 <div>
                     <label id="random-product-thumbnail">Thumbnail size</label>
@@ -183,6 +226,9 @@
             </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
 
 </html>

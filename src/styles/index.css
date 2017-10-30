@@ -34,6 +34,7 @@
 	text-align: center;
 	word-break: break-all;
 	word-wrap: break-word;
+	word-break: break-word;
 }
 
 #random-products #random-products-wrapper #random-products__list .random-product__price {

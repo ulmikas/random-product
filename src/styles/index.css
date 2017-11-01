@@ -10,15 +10,13 @@
 	display: flex;
 	flex-direction: row;
 	margin: 10px 0;
-	/* overflow: hidden; */
 	flex-wrap: wrap;
 }
 
 #random-products #random-products-wrapper #random-products__list .random-product {
 	box-sizing: border-box;
 	padding: 1px 5px 5px;
-	flex: 1 0 33.33%;
-	max-width: 33.33%;
+	flex: 1;
 }
 #random-products #random-products-wrapper #random-products__list .random-product:hover {
 	box-shadow: inset 0 0 0 1px #eee;
@@ -51,12 +49,10 @@
 }
 
 #random-products #random-products-wrapper #random-products__list .random-product .random-product__thumb {
-	/* height: 200px; */
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	margin: auto;
-	max-width: 100%;
 }
 
 #random-products #random-products-wrapper #random-products__list .random-product .random-product__thumb img {
@@ -69,8 +65,7 @@
 		font-size: 16px;
 	}
 	#random-products #random-products-wrapper #random-products__list .random-product {
-		flex: 1 0 25%;
-		max-width: 25%;
+		flex: 0;
 	}
 }
 

@@ -23,12 +23,12 @@ class App extends Component {
       .then(res => {
         this.setState({
           prooductsIds: res,
-          rp: this.getRandomProducts(count)
+          rp: this.getRandomProducts(res, count)
         });
 
         Ecwid.OnPageLoad.add((page) => {
           this.setState({
-            rp: this.getRandomProducts(count)
+            rp: this.getRandomProducts(this.state.prooductsIds, count)
           });
         });
       });
@@ -57,8 +57,8 @@ class App extends Component {
     );
   }
 
-  getRandomProducts = (count = 1) => {
-    let pIds = this.state.prooductsIds;
+  getRandomProducts = (res = [], count = 1) => {
+    let pIds = res;
     let random = [];
     while (random.length < count && pIds.length) {
       const rand = Math.floor(Math.random() * pIds.length);

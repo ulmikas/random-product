@@ -48,7 +48,7 @@
 
 	const settings = {
 		title: 'Other cool products',
-		categories: [],
+		categories: 'all',
 		count: 5,
 		offstock: false,
 		thumbnail: 150,
@@ -65,7 +65,7 @@
 		const valArr = value.split(',');
 		if (inputs) {
 			inputs.forEach(i => {
-				i.checked = valArr.indexOf('' + i.id) > -1;
+				i.checked = valArr.indexOf('' + i.id) > -1 || value === 'all';
 			});
 			document.querySelector('.selected-categories__status').innerHTML =
 				(inputs[0].checked) ? labels[lang]['random-product-all-categories'] : inputs.map(j => (j.checked) ? j.name : '').filter(i => i !== '').join(', ');
@@ -141,7 +141,7 @@
 			categoriesList.classList.toggle('opened');
 			if (categoriesList.classList.contains('opened')) {
 				setOutsideClick();
-			} 
+			}
 		});
 
 		selectAll(inputs, true);
@@ -265,7 +265,7 @@
 		saveSettings(rvpSettings, false);
 
 		rvpForm.title.value = rvpSettings.title;
-		rvpForm.categories.value = rvpSettings.categories;
+		rvpForm.categories.value = rvpSettings.categories || 'all';
 		rvpForm.count.value = rvpSettings.count;
 		rvpForm.offstock.checked = rvpSettings.offstock;
 		rvpForm.thumbnail.value = rvpSettings.thumbnail;

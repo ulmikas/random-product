@@ -63,7 +63,7 @@
 	const syncCategories = (value) => {
 		const inputs = [].slice.call(document.querySelectorAll('.selected-categories .list-dropdown input'));
 		const valArr = value.split(',');
-		if (inputs) {
+		if (inputs && inputs.length) {
 			inputs.forEach(i => {
 				i.checked = valArr.indexOf('' + i.id) > -1 || value === 'all';
 			});

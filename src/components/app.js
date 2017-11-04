@@ -16,7 +16,7 @@ class App extends Component {
 
   componentWillMount() {
     const count = parseInt(this.props.appSettings.count, 10);
-    const categories = (this.props.appSettings.categories === 'all')
+    const categories = (this.props.appSettings.categories === 'all' || !this.props.appSettings.categories || this.props.appSettings.categories === '')
       ? []
       : this.props.appSettings.categories.split(',').map(i => Number(i));
     getProductsIds(this.props.apiSettings.storeId, this.props.apiSettings.token, categories, this.props.appSettings.offstock)

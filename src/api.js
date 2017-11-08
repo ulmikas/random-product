@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const urlAPI = 'https://app.ecwid.com/api/v3/';
-const maxProducts = 2;
-const maxCategories = 2;
+const maxProducts = 100;
+const maxCategories = 100;
 
 const getUrl = (storeId, token) => `${urlAPI}${storeId}/products?enabled=true&token=${token}`;
 

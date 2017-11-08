@@ -79,7 +79,6 @@
 
 	#random-products #random-products-wrapper #random-products__list .random-product {
 		flex: 1 0 20%;
-		max-width: 20%;
 		padding: 1px 10px 10px;
 	}
 

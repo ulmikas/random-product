@@ -1,6 +1,6 @@
 import {h, Component } from 'preact';
 import Product from './Product';
-import { getProductsIds } from '../api';
+import { getProductsIds, getProducts } from '../api';
 
 const Ecwid = window.Ecwid;
 
@@ -19,19 +19,21 @@ class App extends Component {
     const categories = (this.props.appSettings.categories === 'all' || !this.props.appSettings.categories || this.props.appSettings.categories === '')
       ? []
       : this.props.appSettings.categories.split(',').map(i => Number(i));
-    getProductsIds(this.props.apiSettings.storeId, this.props.apiSettings.token, categories, this.props.appSettings.offstock)
-      .then(res => {
-        this.setState({
-          prooductsIds: res,
-          rp: this.getRandomProducts(res, count)
-        });
+    
+      getProducts(this.props.apiSettings, this.props.appSettings);
+    // getProductsIds(this.props.apiSettings.storeId, this.props.apiSettings.token, categories, this.props.appSettings.offstock)
+    //   .then(res => {
+    //     this.setState({
+    //       prooductsIds: res,
+    //       rp: this.getRandomProducts(res, count)
+    //     });
 
-        Ecwid.OnPageLoad.add((page) => {
-          this.setState({
-            rp: this.getRandomProducts(this.state.prooductsIds, count)
-          });
-        });
-      });
+    //     Ecwid.OnPageLoad.add((page) => {
+    //       this.setState({
+    //         rp: this.getRandomProducts(this.state.prooductsIds, count)
+    //       });
+    //     });
+    //   });
   }
 
   render() {

@@ -39,7 +39,7 @@ Ecwid.OnAPILoaded.add(() => {
 
   const appId = 'random-products';
   const jsonConfig = Ecwid.getAppPublicConfig(appId);
-  const defaultSettings = { title: '', categories: 'all', count: 1, offstock: false, thumbnail: 150, layout: '<a href="{link}">{img}{name}{price}</a>', place: 'above' };
+  const defaultSettings = { title: '', categories: 'all', count: 5, offstock: false, thumbnail: 150, layout: '<a href="{link}">{img}{name}{price}</a>', place: 'above' };
   const settings = (!jsonConfig || jsonConfig === '')
     ? defaultSettings
     : { ...defaultSettings, ...JSON.parse(jsonConfig) };

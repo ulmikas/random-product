@@ -6,30 +6,31 @@ class Product extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      visible: true,
-      name: '',
-      url: '',
-      dataurl: '',
-      img: '',
-      price: ''
-    };
+    console.log('!?!', props);
+
+    // this.state = {
+    //   name: '',
+    //   url: '',
+    //   dataurl: '',
+    //   img: '',
+    //   price: ''
+    // };
   }
 
-  componentWillMount() {
-    const self = this;
-    axios.get(this.props.url)
-      .then(({ data }) => {
-        self.setState({
-          visible: !!data.name || !!data.priceInProductList,
-          name: data.name,
-          url: data.url,
-          dataurl: ((typeof Wix === 'undefined') ? "#" : "") + "!/p/" + data.id,
-          img: data.thumbnailUrl,
-          price: Ecwid.formatCurrency(data.priceInProductList)
-        });
-      });
-  }
+  // componentWillMount() {
+  //   // const self = this;
+  //   // axios.get(this.props.url)
+  //   //   .then(({ data }) => {
+  //   //   });
+  //   this.setState({
+
+      
+      
+
+  //     img: this.props.item.thumbnailUrl,
+  //     price: Ecwid.formatCurrency(this.props.item.priceInProductList)
+  //   });
+  // }
 
   componentDidUpdate() {
     const event = document.createEvent('Event');
@@ -38,7 +39,7 @@ class Product extends Component {
   }
 
   render() {
-    const visibility = (this.state.visible)? '' : 'display: none;';
+    const visibility = (!!this.props.item.name || !!this.props.item.priceInProductList)? '' : 'display: none;';
     const cln = `random-product random-product--${this.props.id}`;
   
     return (
@@ -50,11 +51,11 @@ class Product extends Component {
 
   makeLayout = () => {
     const values = {
-      img: `<span class="random-product__thumb" style="width:${this.props.thumbSize}px; height:${this.props.thumbSize}px;"><img alt="" src=${this.state.img} /></span>`,
-      link: this.state.url,
-      data_link: this.state.dataurl,
-      name: `<span class="random-product__name">${this.state.name}</span>`,
-      price: `<span class="random-product__price ecwid-productBrowser-price">${this.state.price}</span>`,
+      img: `<span class="random-product__thumb" style="width:${this.props.thumbSize}px; height:${this.props.thumbSize}px;"><img alt="" src=${this.props.item.thumbnailUrl} /></span>`,
+      link: this.props.item.url,
+      data_link: ((typeof Wix === 'undefined') ? "#" : "") + "!/p/" + this.props.item.id,
+      name: `<span class="random-product__name">${this.props.item.name}</span>`,
+      price: `<span class="random-product__price ecwid-productBrowser-price">${Ecwid.formatCurrency(this.props.item.priceInProductList)}</span>`,
       click: this.onClick
     };
     

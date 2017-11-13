@@ -1,104 +1,116 @@
 import axios from 'axios';
 
 const urlAPI = 'https://app.ecwid.com/api/v3/';
-const maxProducts = 100;
-const maxCategories = 100;
+const limit = 100;
+const maxRequests = 5;
 
 const getUrl = (storeId, token) => `${urlAPI}${storeId}/products?enabled=true&token=${token}`;
+const getCatUrl = (storeId, token) => `${urlAPI}${storeId}/categories?token=${token}`;
 
-// const getTotalCount = async (storeId, token) => {
-//   const total = await axios
-//     .get(`${getUrl(storeId, token)}&limit=1`)
-//     .then(response => response.data.total);
-//   return total;
-// };
+const inCategories = (cats, ids, frontpage) => ((cats.indexOf(0) > -1 && frontpage > 0) ||
+  cats.filter(i => ids.indexOf(i) > -1).length > 0);
 
-const inCategories = (cats, ids, frontpage) => {
-  console.log(cats, ids, frontpage);
-  if (cats.indexOf(0) > -1 && frontpage > 0) {
-    console.log('!');
-    return true;
+// get random int in range
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+// get random offset
+const getRandomOffset = (total) => getRandomInt(limit + 1, total - limit);
+
+// get random category
+const getRandomCategory = (length) => getRandomInt(0, length - 1);
+
+// shuffle array
+const shuffle = (arr) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
   }
-  const intersection = cats.filter(i => ids.indexOf(i) > -1);
-  return intersection.length > 0;
+  return a;
 };
 
-const getAllProducts = async (storeId, token, offstock) => {
+// remove duplicates
+const normalize = arr => {
+  return arr.reduce((acc, cur) => {
+    const ids = acc.ids || [];
+    if (!acc.hasOwnProperty(cur.id)) {
+      acc = { ...acc, ids: [...ids, cur.id], [cur.id]: cur };
+    }
+    return acc;
+  }, {});
+};
+
+const getAllCategories = async (storeSettings) => {
   let offset = 0;
-  let items = [];
+  let cats = [];
   let promises = [];
-  const inStock = (offstock) ? '' : '&inStock=true';
+
   const firstRequest = await axios
-    .get(`${getUrl(storeId, token)}&offset=${offset}${inStock}&limit=${maxProducts}`)
+    .get(`${getCatUrl(storeSettings.storeId, storeSettings.token)}&offset=${offset}`)
     .then(response => response.data);
 
-  if (firstRequest.total <= maxProducts) {
-    return firstRequest.items;
-  } else {
+  cats = [...cats, ...firstRequest.items];
+  offset += limit;
 
+  while (offset < firstRequest.total && offset < limit * maxRequests ) {
+    const catsMore = axios
+      .get(`${getCatUrl(storeSettings.storeId, storeSettings.token)}&offset=${offset}`);
+    promises = [...promises, ...catsMore];
+    offset += limit;
   }
-
-  console.log('!!!!', firstRequest);
-
-  // const totalProducts = await getTotalCount(storeId, token);
-  
-  // do {
-  //   const products = axios
-  //     .get(`${getUrl(storeId, token)}&offset=${offset}${inStock}&limit=${maxProducts}`)
-  //     .then(response => response.data.items);
-  //   promises = [...promises, ...products];
-  //   offset += maxProducts;
-  // } while (totalProducts > offset);
-  // items = await Promise.all(promises);
-  // return items.reduce((prev, cur) => [...prev, ...cur], []);
+  const allCategories = await axios.all(promises).then(res => {
+    return res.reduce((acc, cur) => [...acc, ...cur.data.items], []);
+  });
+  return [...firstRequest.items, ...allCategories].map(i => i.id);
 };
 
-const getProductsIds = async (storeId, token, categories, offstock) => {
-  try {
-    const products = await getAllProducts(storeId, token, offstock)
-      .then(products => console.log(products) || products.reduce((akk, cur) => {
-        if (categories.length === 0 || inCategories(categories, cur.categoryIds, cur.showOnFrontpage)) {
-          akk = [...akk, cur.id];
-        }
-        return akk;
-      }, []));
-
-    return products;
-  } catch (err) {
-    console.log(err);
+// get additional products
+const getMoreProducts = async (storeId, token, offstock, total, categories) => {
+  const loopEnd = a => (categories) ? a < total + 1 : a * limit < total;
+  let Promises = [];
+  let inStock = (offstock) ? '' : '&inStock=true';
+  for (let i = 1; i < maxRequests && loopEnd(i); i++) {
+    const offset = (categories) ? `category=${categories[i-1]}` : `offset=${limit * i}`;
+    const products = axios
+      .get(`${getUrl(storeId, token)}&${offset}${inStock}`);
+    Promises = [...Promises, ...products];
   }
+  const moreProducts = await axios.all(Promises).then(res => {
+    return res.reduce((acc, cur) => [...acc, ...cur.data.items], []);
+  });
+  return moreProducts;
 };
-
-
-
-
 
 const getProducts = async (storeSettings, appSettings) => {
   let offset = 0;
   let items = [];
   let promises = [];
   const inStock = (appSettings.offstock) ? '' : '&inStock=true';
-  const categoriesCount = (appSettings.categories === 'all') ? 0 : appSettings.categories.length;
-  const cats = (appSettings.categories === 'all') ? [] : appSettings.categories.split(",").map(i => Number(i));
+  const categories = (appSettings.categories === 'all') ? await getAllCategories(storeSettings) : appSettings.categories.split(",").map(i => Number(i));
   const firstRequest = await axios
-    .get(`${getUrl(storeSettings.storeId, storeSettings.token)}&offset=${offset}${inStock}&limit=${maxProducts}`)
+    .get(`${getUrl(storeSettings.storeId, storeSettings.token)}&offset=${offset}${inStock}`)
     .then(response => response.data);
 
-  items = (categoriesCount)
-    ? firstRequest.items.filter(i => console.log(i) || inCategories(cats, i.categoryIds, i.showOnFrontpage))
-    : firstRequest.items;
-
-  console.log('!?!', items);
-
-  // if (firstRequest.total <= maxProducts) {
-  //   return firstRequest.items;
-  // }
-
-  if (categoriesCount) {
-
+  items = [...items, ...firstRequest.items];
+  
+  if (firstRequest.total <= limit * maxRequests) {
+    const restProducts = await getMoreProducts(storeSettings.storeId, storeSettings.token, appSettings.offstock, firstRequest.total);
+    items = [...items, ...restProducts];
+    if (categories.length) {
+      items = [...items.filter(i => inCategories(categories, i.categoryIds, i.showOnFrontpage))];
+    }
+    return normalize(items);
   }
-  const maxRequests = Math.min(parseInt(appSettings.count, 10), categoriesCount);
-  console.log(appSettings, requests);
+
+  if (categories.length) {
+    const catsPorducts = await getMoreProducts(storeSettings.storeId, storeSettings.token, appSettings.offstock, categories.length, categories);
+    return normalize([...items, ...catsPorducts].filter(i => inCategories(categories, i.categoryIds, i.showOnFrontpage)));
+  }
+
+  const secondRequest = await axios
+    .get(`${getUrl(storeSettings.storeId, storeSettings.token)}&offset=${getRandomOffset(firstRequest.total)}${inStock}`)
+    .then(response => response.data);
+  return normalize([...items, ...secondRequest.items]);
 };
 
-export { getProductsIds, getProducts };
+export { getProducts };

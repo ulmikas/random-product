@@ -19,30 +19,40 @@
 			'random-product-layout': 'Product layout template',
 			'random-product-save': 'Save',
 			'random-product-above': 'Above Storefront',
-			'random-product-under': 'Under Storefront',
+			'random-product-under': 'Below Storefront',
 			'random-product-custom': 'Custom container',
 			'random-product-saved': 'Settings were successfully saved!',
 			'random-product-custom-selector': 'CSS Selector',
+			'random-product-category': 'Categories',
 			'random-product-all-categories': 'All categories',
-			'random-product-choose-categories': 'Please choose categories'
+			'random-product-choose-categories': 'Please choose categories',
+			'random-product-name': 'product name',
+			'random-product-link': 'URL to product page',
+			'random-product-price': 'product price',
+			'random-product-img': 'product image'
 		},
 		ru: {
 			'random-product-title': 'Случайные товары',
-			'random-product-widget-title': 'Заголовок',
+			'random-product-widget-title': 'Заголовок виджета',
 			'random-product-widget-placeholder': 'Заголовок виджета',
-			'random-product-count': 'Количество показываемых товаров',
-			'random-product-offstock': 'Показвать товары, которых нет в наличии',
-			'random-product-thumbnail': 'Размер картинок',
+			'random-product-count': 'Количество товаров',
+			'random-product-offstock': 'Показывать товары не в наличии',
+			'random-product-thumbnail': 'Размер изображения',
 			'random-product-place': 'Размещение виджета',
-			'random-product-layout': 'Шаблон виждета',
+			'random-product-layout': 'Шаблон отображаемого товара',
 			'random-product-save': 'Сохранить',
-			'random-product-above': 'Над товарами',
-			'random-product-under': 'Под товарами',
+			'random-product-above': 'Над витриной',
+			'random-product-under': 'Под витриной',
 			'random-product-custom': 'Другой контейнер',
 			'random-product-saved': 'Настройки успешно сохранены!',
 			'random-product-custom-selector': 'CSS селектор',
+			'random-product-category': 'Категории',
 			'random-product-all-categories': 'Все категории',
-			'random-product-choose-categories': 'Пожалуйста, выберите категории'
+			'random-product-choose-categories': 'Пожалуйста, выберите категории',
+			'random-product-name': 'название товара',
+			'random-product-link': 'ссылка на страницу товара',
+			'random-product-price': 'цена товара',
+			'random-product-img': 'изображение товара'
 		}
 	};
 
@@ -210,8 +220,13 @@
 			'random-product-thumbnail',
 			'random-product-place',
 			'random-product-layout',
+			'random-product-category',
 			// 'random-product-save',
-			'random-product-custom-selector'
+			'random-product-custom-selector',
+			'random-product-name',
+			'random-product-link',
+			'random-product-price',
+			'random-product-img'
 		].forEach(i => setLabel(i)(lbls));
 		document.querySelector('#random-product-widget-placeholder').placeholder =
 			lbls['random-product-widget-placeholder'];

@@ -29,21 +29,6 @@ class App extends Component {
       });
   }
 
-
-  // favorites:{count: 0, displayedCount: "0"}
-  // hdThumbnailUrl:"https://dqzrr9k4bjpzk.cloudfront.net/images/7022058/464713340.jpg"
-  // id:49734742
-  // imageUrl:"https://dqzrr9k4bjpzk.cloudfront.net/default-store/00002-sq.jpg"
-  // inStock:true
-  // name:"Peach"
-  // originalImage:{url: "https://dqzrr9k4bjpzk.cloudfront.net/default-store/00002-sq.jpg", width: 425, height: 425}
-  // originalImageUrl:"https://dqzrr9k4bjpzk.cloudfront.net/default-store/00002-sq.jpg"
-  // price:8.99
-  // priceInProductList:8.99
-  // smallThumbnailUrl:"https://dqzrr9k4bjpzk.cloudfront.net/images/7022058/464713335.jpg"
-  // thumbnailUrl:"https://dqzrr9k4bjpzk.cloudfront.net/images/7022058/464713328.jpg"
-  // url:"https://store7022058.ecwid.com/#!/Peach/p/49734742"
-
   render() {
     const title = this.props.appSettings.title || '';
     return (

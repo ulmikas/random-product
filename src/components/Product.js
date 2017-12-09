@@ -6,31 +6,7 @@ class Product extends Component {
   constructor(props) {
     super(props);
 
-    console.log('!?!', props);
-
-    // this.state = {
-    //   name: '',
-    //   url: '',
-    //   dataurl: '',
-    //   img: '',
-    //   price: ''
-    // };
   }
-
-  // componentWillMount() {
-  //   // const self = this;
-  //   // axios.get(this.props.url)
-  //   //   .then(({ data }) => {
-  //   //   });
-  //   this.setState({
-
-      
-      
-
-  //     img: this.props.item.thumbnailUrl,
-  //     price: Ecwid.formatCurrency(this.props.item.priceInProductList)
-  //   });
-  // }
 
   componentDidUpdate() {
     const event = document.createEvent('Event');
